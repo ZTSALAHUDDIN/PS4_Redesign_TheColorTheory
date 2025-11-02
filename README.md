@@ -1,6 +1,6 @@
 <h1>Website Redesign</h1>
 
-<p>This repository contains the redesigned version of <strong>[Project Name]</strong>. The goal of this redesign is to provide a <strong>clean, modern, and user-friendly interface</strong> while retaining all original functionality.</p>
+<p>This repository contains the redesigned version of <strong>problem Statement 4</strong>. The goal of this redesign is to provide a <strong>clean, modern, and user-friendly interface</strong> while retaining all original functionality.</p>
 
 <hr>
 
