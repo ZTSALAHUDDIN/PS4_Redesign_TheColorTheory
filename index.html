@@ -1,888 +1,1324 @@
 <!doctype html>
 <html lang="en">
- 
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Learning Platform</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      z-index: 9999;
+      transition: width 0.1s ease;
+    }
+    
+    .floating-element {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .course-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .course-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    
+    .category-chip {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .category-chip:hover {
+      transform: scale(1.1);
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .pricing-card:hover {
+      border-color: #667eea;
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+    }
+    
+    .accordion-item {
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .accordion-content.active {
+      max-height: 500px;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 1s ease;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .horizontal-scroll {
+      display: flex;
+      overflow-x: auto;
+      gap: 24px;
+      padding: 20px 0;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    
+    .horizontal-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .horizontal-scroll > * {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+    
+    .pathway-step {
+      text-align: center;
+      margin: 0 20px;
+    }
+    
+    .pathway-connector {
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      margin: 30px 0;
+      border-radius: 2px;
+    }
+    
+    .quiz-option.selected {
+      border-color: #667eea;
+      background: #f3f4f6;
+    }
+    
+    .stat-counter {
+      font-size: 48px;
+      font-weight: 800;
+      color: #667eea;
+    }
+    
+    .video-overlay {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .video-overlay::after {
+      content: '▶';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #667eea;
+      transition: all 0.3s ease;
+    }
+    
+    .video-overlay:hover::after {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: white;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body><!-- Scroll Progress Indicator -->
+  <div class="scroll-indicator" id="scrollIndicator"></div><!-- Hero Section -->
+  <section class="gradient-bg min-h-screen relative overflow-hidden flex items-center justify-center"><!-- Floating Elements -->
+   <div class="absolute top-20 left-10 floating-element opacity-20">
+    <svg width="80" height="80" viewbox="0 0 80 80" fill="none"><rect width="80" height="80" rx="16" fill="white" />
+    </svg>
+   </div>
+   <div class="absolute bottom-20 right-10 floating-element opacity-20" style="animation-delay: 2s;">
+    <svg width="100" height="100" viewbox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="50" fill="white" />
+    </svg>
+   </div>
+   <div class="container mx-auto px-6 text-center relative z-10">
+    <h1 id="heroHeadline" class="text-6xl md:text-8xl font-bold text-white mb-6 leading-tight">Learn Anything. Anywhere.</h1>
+    <p id="heroSubheadline" class="text-2xl text-white opacity-90 mb-12 max-w-3xl mx-auto">Join millions of learners worldwide</p>
+    <div class="flex gap-6 justify-center flex-wrap"><button id="ctaPrimary" class="bg-white text-purple-600 px-10 py-5 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all hover:scale-105 shadow-2xl"> Start Learning </button> <button id="ctaSecondary" class="bg-transparent border-2 border-white text-white px-10 py-5 rounded-full text-lg font-semibold hover:bg-white hover:text-purple-600 transition-all"> Browse Courses </button>
+    </div>
+   </div>
+  </section><!-- Quick Course Search -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+     <div class="relative mb-12"><input type="text" id="searchInput" placeholder="What do you want to learn today?" class="w-full px-8 py-6 text-xl rounded-full border-2 border-gray-200 focus:border-purple-500 focus:outline-none shadow-lg"> <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-purple-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-purple-700 transition-all"> Search </button>
+     </div>
+     <div class="flex gap-4 justify-center flex-wrap"><span class="category-chip bg-blue-100 text-blue-700 px-6 py-3 rounded-full font-semibold">🎨 Design</span> <span class="category-chip bg-green-100 text-green-700 px-6 py-3 rounded-full font-semibold">🤖 AI</span> <span class="category-chip bg-orange-100 text-orange-700 px-6 py-3 rounded-full font-semibold">📈 Marketing</span> <span class="category-chip bg-purple-100 text-purple-700 px-6 py-3 rounded-full font-semibold">💻 Coding</span>
+     </div>
+    </div>
+   </div>
+  </section><!-- Top Courses Carousel -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Top Courses</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Start learning from the best</p>
+    <div class="horizontal-scroll px-6">
+     <div class="course-card w-80">
+      <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600"></div>
+      <div class="p-6">
+       <h3 class="text-xl font-bold mb-2">Web Development Masterclass</h3>
+       <p class="text-gray-600 mb-4">By Sarah Johnson</p>
+       <div class="flex items-center justify-between"><span class="text-yellow-500">★★★★★ 4.9</span> <span class="font-bold text-purple-600">$49</span>
+       </div>
+      </div>
+     </div>
+     <div class="course-card w-80">
+      <div class="h-48 bg-gradient-to-br from-purple-400 to-purple-600"></div>
+      <div class="p-6">
+       <h3 class="text-xl font-bold mb-2">UI/UX Design Fundamentals</h3>
+       <p class="text-gray-600 mb-4">By Michael Chen</p>
+       <div class="flex items-center justify-between"><span class="text-yellow-500">★★★★★ 4.8</span> <span class="font-bold text-purple-600">$39</span>
+       </div>
+      </div>
+     </div>
+     <div class="course-card w-80">
+      <div class="h-48 bg-gradient-to-br from-green-400 to-green-600"></div>
+      <div class="p-6">
+       <h3 class="text-xl font-bold mb-2">Data Science with Python</h3>
+       <p class="text-gray-600 mb-4">By Dr. Emily Rodriguez</p>
+       <div class="flex items-center justify-between"><span class="text-yellow-500">★★★★★ 5.0</span> <span class="font-bold text-purple-600">$59</span>
+       </div>
+      </div>
+     </div>
+     <div class="course-card w-80">
+      <div class="h-48 bg-gradient-to-br from-orange-400 to-orange-600"></div>
+      <div class="p-6">
+       <h3 class="text-xl font-bold mb-2">Digital Marketing Strategy</h3>
+       <p class="text-gray-600 mb-4">By James Wilson</p>
+       <div class="flex items-center justify-between"><span class="text-yellow-500">★★★★★ 4.7</span> <span class="font-bold text-purple-600">$44</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Trusted By Section -->
+  <section class="py-16 bg-white">
+   <div class="container mx-auto px-6">
+    <p class="text-center text-gray-600 mb-8 text-lg">Trusted by leading organizations</p>
+    <div class="flex justify-center items-center gap-12 flex-wrap opacity-60">
+     <div class="text-3xl font-bold text-gray-800">
+      Google
+     </div>
+     <div class="text-3xl font-bold text-gray-800">
+      MIT
+     </div>
+     <div class="text-3xl font-bold text-gray-800">
+      Stanford
+     </div>
+     <div class="text-3xl font-bold text-gray-800">
+      IBM
+     </div>
+     <div class="text-3xl font-bold text-gray-800">
+      Microsoft
+     </div>
+    </div>
+   </div>
+  </section><!-- Learning Impact Metrics -->
+  <section class="py-20 gradient-bg">
+   <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center text-white">
+     <div class="fade-in">
+      <div id="metricStudents" class="stat-counter text-white mb-2">
+       1.2M Students
+      </div>
+      <p class="text-xl opacity-90">Active Learners</p>
+     </div>
+     <div class="fade-in">
+      <div id="metricInstructors" class="stat-counter text-white mb-2">
+       5,000 Instructors
+      </div>
+      <p class="text-xl opacity-90">Expert Teachers</p>
+     </div>
+     <div class="fade-in">
+      <div id="metricSatisfaction" class="stat-counter text-white mb-2">
+       98% Satisfaction
+      </div>
+      <p class="text-xl opacity-90">Happy Students</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Course Categories Grid -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Explore Categories</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Find your passion</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+     <div class="card-hover bg-blue-500 text-white p-8 rounded-3xl cursor-pointer">
+      <div class="text-5xl mb-4">
+       💻
+      </div>
+      <h3 class="text-2xl font-bold mb-2">Technology</h3>
+      <p class="opacity-90">250+ courses</p>
+     </div>
+     <div class="card-hover bg-purple-500 text-white p-8 rounded-3xl cursor-pointer">
+      <div class="text-5xl mb-4">
+       🎨
+      </div>
+      <h3 class="text-2xl font-bold mb-2">Design</h3>
+      <p class="opacity-90">180+ courses</p>
+     </div>
+     <div class="card-hover bg-green-500 text-white p-8 rounded-3xl cursor-pointer">
+      <div class="text-5xl mb-4">
+       💼
+      </div>
+      <h3 class="text-2xl font-bold mb-2">Business</h3>
+      <p class="opacity-90">320+ courses</p>
+     </div>
+     <div class="card-hover bg-orange-500 text-white p-8 rounded-3xl cursor-pointer">
+      <div class="text-5xl mb-4">
+       📈
+      </div>
+      <h3 class="text-2xl font-bold mb-2">Marketing</h3>
+      <p class="opacity-90">150+ courses</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- How Learning Works -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-16">How It Works</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+     <div class="text-center fade-in">
+      <div class="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+       🔍
+      </div>
+      <h3 class="text-2xl font-bold mb-3">Discover</h3>
+      <p class="text-gray-600">Browse thousands of courses</p>
+     </div>
+     <div class="text-center fade-in">
+      <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+       📚
+      </div>
+      <h3 class="text-2xl font-bold mb-3">Learn</h3>
+      <p class="text-gray-600">Study at your own pace</p>
+     </div>
+     <div class="text-center fade-in">
+      <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+       💪
+      </div>
+      <h3 class="text-2xl font-bold mb-3">Practice</h3>
+      <p class="text-gray-600">Apply your knowledge</p>
+     </div>
+     <div class="text-center fade-in">
+      <div class="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">
+       🎓
+      </div>
+      <h3 class="text-2xl font-bold mb-3">Certify</h3>
+      <p class="text-gray-600">Earn recognized certificates</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Progress Tracker Preview -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+     <h2 class="text-5xl font-bold text-center mb-4">Track Your Progress</h2>
+     <p class="text-xl text-gray-600 text-center mb-12">Stay motivated with visual progress tracking</p>
+     <div class="bg-white rounded-3xl p-8 shadow-xl">
+      <div class="mb-8">
+       <div class="flex justify-between mb-2"><span class="font-semibold">Web Development Masterclass</span> <span class="text-purple-600 font-bold">75%</span>
+       </div>
+       <div class="progress-bar">
+        <div class="progress-fill" style="width: 75%"></div>
+       </div>
+      </div>
+      <div class="mb-8">
+       <div class="flex justify-between mb-2"><span class="font-semibold">UI/UX Design Fundamentals</span> <span class="text-purple-600 font-bold">45%</span>
+       </div>
+       <div class="progress-bar">
+        <div class="progress-fill" style="width: 45%"></div>
+       </div>
+      </div>
+      <div class="grid grid-cols-3 gap-6 mt-8">
+       <div class="text-center">
+        <div class="text-3xl mb-2">
+         🔥
+        </div>
+        <div class="font-bold text-2xl text-purple-600">
+         12
+        </div>
+        <div class="text-gray-600">
+         Day Streak
+        </div>
+       </div>
+       <div class="text-center">
+        <div class="text-3xl mb-2">
+         ⭐
+        </div>
+        <div class="font-bold text-2xl text-purple-600">
+         850
+        </div>
+        <div class="text-gray-600">
+         XP Points
+        </div>
+       </div>
+       <div class="text-center">
+        <div class="text-3xl mb-2">
+         🏆
+        </div>
+        <div class="font-bold text-2xl text-purple-600">
+         8
+        </div>
+        <div class="text-gray-600">
+         Badges
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Meet the Instructors -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Meet Our Instructors</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Learn from industry experts</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+     <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
+      <div class="h-64 bg-gradient-to-br from-blue-400 to-blue-600"></div>
+      <div class="p-6">
+       <h3 class="text-2xl font-bold mb-2">Sarah Johnson</h3>
+       <p class="text-purple-600 font-semibold mb-3">Web Developer</p>
+       <p class="text-gray-600 mb-4">10+ years at Google, teaching 50K+ students</p>
+       <div class="flex gap-2"><span class="badge bg-blue-100 text-blue-700">JavaScript</span> <span class="badge bg-green-100 text-green-700">React</span>
+       </div>
+      </div>
+     </div>
+     <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
+      <div class="h-64 bg-gradient-to-br from-purple-400 to-purple-600"></div>
+      <div class="p-6">
+       <h3 class="text-2xl font-bold mb-2">Michael Chen</h3>
+       <p class="text-purple-600 font-semibold mb-3">UX Designer</p>
+       <p class="text-gray-600 mb-4">Lead Designer at Apple, 8 years experience</p>
+       <div class="flex gap-2"><span class="badge bg-purple-100 text-purple-700">Figma</span> <span class="badge bg-pink-100 text-pink-700">Design</span>
+       </div>
+      </div>
+     </div>
+     <div class="card-hover bg-white rounded-3xl overflow-hidden shadow-lg">
+      <div class="h-64 bg-gradient-to-br from-green-400 to-green-600"></div>
+      <div class="p-6">
+       <h3 class="text-2xl font-bold mb-2">Dr. Emily Rodriguez</h3>
+       <p class="text-purple-600 font-semibold mb-3">Data Scientist</p>
+       <p class="text-gray-600 mb-4">PhD from MIT, AI researcher at IBM</p>
+       <div class="flex gap-2"><span class="badge bg-green-100 text-green-700">Python</span> <span class="badge bg-blue-100 text-blue-700">ML</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Student Testimonials -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Student Success Stories</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Real results from real learners</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+     <div class="testimonial-card">
+      <div class="flex items-center mb-4">
+       <div class="w-16 h-16 bg-purple-200 rounded-full mr-4"></div>
+       <div>
+        <h4 class="font-bold text-lg">Alex Thompson</h4>
+        <div class="text-yellow-500">
+         ★★★★★
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-700 italic">"This platform changed my career! I went from beginner to landing my dream job as a web developer in just 6 months."</p>
+     </div>
+     <div class="testimonial-card">
+      <div class="flex items-center mb-4">
+       <div class="w-16 h-16 bg-blue-200 rounded-full mr-4"></div>
+       <div>
+        <h4 class="font-bold text-lg">Maria Garcia</h4>
+        <div class="text-yellow-500">
+         ★★★★★
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-700 italic">"The instructors are amazing! Clear explanations, practical projects, and a supportive community. Highly recommend!"</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Pricing Plans -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Choose Your Plan</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Start learning today</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+     <div class="pricing-card">
+      <h3 class="text-2xl font-bold mb-4">Free</h3>
+      <div class="text-5xl font-bold mb-6">
+       $0<span class="text-xl text-gray-600">/mo</span>
+      </div>
+      <ul class="space-y-4 mb-8">
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> 10 free courses</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Basic support</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Community access</li>
+      </ul><button class="w-full bg-gray-200 text-gray-800 py-4 rounded-full font-semibold hover:bg-gray-300 transition-all"> Get Started </button>
+     </div>
+     <div class="pricing-card border-purple-600">
+      <div class="badge bg-purple-600 text-white mb-4">
+       Most Popular
+      </div>
+      <h3 class="text-2xl font-bold mb-4">Pro</h3>
+      <div class="text-5xl font-bold mb-6">
+       $29<span class="text-xl text-gray-600">/mo</span>
+      </div>
+      <ul class="space-y-4 mb-8">
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Unlimited courses</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Priority support</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Certificates</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Offline access</li>
+      </ul><button class="w-full gradient-bg text-white py-4 rounded-full font-semibold hover:opacity-90 transition-all"> Start Pro Trial </button>
+     </div>
+     <div class="pricing-card">
+      <h3 class="text-2xl font-bold mb-4">Enterprise</h3>
+      <div class="text-5xl font-bold mb-6">
+       $99<span class="text-xl text-gray-600">/mo</span>
+      </div>
+      <ul class="space-y-4 mb-8">
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Everything in Pro</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Team management</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Custom content</li>
+       <li class="flex items-center"><span class="text-green-500 mr-2">✓</span> Analytics</li>
+      </ul><button class="w-full bg-gray-200 text-gray-800 py-4 rounded-full font-semibold hover:bg-gray-300 transition-all"> Contact Sales </button>
+     </div>
+    </div>
+   </div>
+  </section><!-- Interactive Quiz Section -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+     <h2 class="text-5xl font-bold mb-4">Test Your Skills</h2>
+     <p class="text-xl text-gray-600 mb-12">Take a quick quiz to find courses perfect for your level</p>
+     <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-3xl p-8 mb-8">
+      <div id="quizContainer">
+       <div class="quiz-question mb-8">
+        <h3 class="text-2xl font-bold mb-6">What's your experience with web development?</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4"><button class="quiz-option bg-white p-6 rounded-2xl text-left hover:bg-purple-100 transition-all border-2 border-transparent hover:border-purple-300">
+          <div class="text-3xl mb-2">
+           🌱
+          </div>
+          <div class="font-semibold">
+           Complete Beginner
+          </div>
+          <div class="text-gray-600 text-sm">
+           Never written code before
+          </div></button> <button class="quiz-option bg-white p-6 rounded-2xl text-left hover:bg-purple-100 transition-all border-2 border-transparent hover:border-purple-300">
+          <div class="text-3xl mb-2">
+           📚
+          </div>
+          <div class="font-semibold">
+           Some Experience
+          </div>
+          <div class="text-gray-600 text-sm">
+           Built a few projects
+          </div></button> <button class="quiz-option bg-white p-6 rounded-2xl text-left hover:bg-purple-100 transition-all border-2 border-transparent hover:border-purple-300">
+          <div class="text-3xl mb-2">
+           💪
+          </div>
+          <div class="font-semibold">
+           Intermediate
+          </div>
+          <div class="text-gray-600 text-sm">
+           Comfortable with frameworks
+          </div></button> <button class="quiz-option bg-white p-6 rounded-2xl text-left hover:bg-purple-100 transition-all border-2 border-transparent hover:border-purple-300">
+          <div class="text-3xl mb-2">
+           🚀
+          </div>
+          <div class="font-semibold">
+           Advanced
+          </div>
+          <div class="text-gray-600 text-sm">
+           Professional developer
+          </div></button>
+        </div>
+       </div>
+       <div class="mb-6">
+        <div class="flex justify-between text-sm text-gray-600 mb-2"><span>Progress</span> <span id="quizProgress">1 of 3</span>
+        </div>
+        <div class="progress-bar">
+         <div id="quizProgressBar" class="progress-fill" style="width: 33%"></div>
+        </div>
+       </div>
+      </div>
+      <div id="quizResults" class="hidden text-center">
+       <div class="text-6xl mb-4">
+        🎉
+       </div>
+       <h3 class="text-3xl font-bold mb-4">Perfect Match Found!</h3>
+       <p class="text-xl text-gray-600 mb-8">Based on your answers, we recommend starting with our Intermediate Web Development track.</p><button class="gradient-bg text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-all"> View Recommended Courses </button>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Learning Pathways Section -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Learning Pathways</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Structured paths to master any skill</p>
+    <div class="space-y-16"><!-- Web Development Path -->
+     <div class="bg-white rounded-3xl p-8 shadow-lg">
+      <div class="flex items-center mb-8">
+       <div class="text-4xl mr-4">
+        💻
+       </div>
+       <div>
+        <h3 class="text-3xl font-bold">Web Development Path</h3>
+        <p class="text-gray-600">From zero to full-stack developer</p>
+       </div>
+      </div>
+      <div class="flex items-center justify-between overflow-x-auto pb-4">
+       <div class="flex items-center min-w-max">
+        <div class="pathway-step active">
+         <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          1
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           HTML &amp; CSS
+          </div>
+          <div class="text-sm text-gray-600">
+           4 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          2
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           JavaScript
+          </div>
+          <div class="text-sm text-gray-600">
+           6 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          3
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           React
+          </div>
+          <div class="text-sm text-gray-600">
+           8 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          4
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Backend
+          </div>
+          <div class="text-sm text-gray-600">
+           10 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          🏆
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Certificate
+          </div>
+          <div class="text-sm text-gray-600">
+           Portfolio
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Data Science Path -->
+     <div class="bg-white rounded-3xl p-8 shadow-lg">
+      <div class="flex items-center mb-8">
+       <div class="text-4xl mr-4">
+        📊
+       </div>
+       <div>
+        <h3 class="text-3xl font-bold">Data Science Path</h3>
+        <p class="text-gray-600">Master data analysis and machine learning</p>
+       </div>
+      </div>
+      <div class="flex items-center justify-between overflow-x-auto pb-4">
+       <div class="flex items-center min-w-max">
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          1
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Python Basics
+          </div>
+          <div class="text-sm text-gray-600">
+           3 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          2
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Statistics
+          </div>
+          <div class="text-sm text-gray-600">
+           4 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          3
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Pandas &amp; NumPy
+          </div>
+          <div class="text-sm text-gray-600">
+           5 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          4
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Machine Learning
+          </div>
+          <div class="text-sm text-gray-600">
+           8 weeks
+          </div>
+         </div>
+        </div>
+        <div class="pathway-connector"></div>
+        <div class="pathway-step">
+         <div class="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">
+          🏆
+         </div>
+         <div class="text-center">
+          <div class="font-semibold">
+           Certificate
+          </div>
+          <div class="text-sm text-gray-600">
+           Capstone
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Community Section -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Join Our Community</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Connect with 12,000+ learners collaborating every day</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+     <div class="bg-gray-50 rounded-2xl p-6">
+      <div class="flex items-start mb-4">
+       <div class="w-12 h-12 bg-blue-200 rounded-full mr-3"></div>
+       <div class="flex-1">
+        <div class="flex items-center mb-1"><span class="font-semibold">Alex Chen</span> <span class="text-sm text-gray-500 ml-2">2 hours ago</span>
+        </div>
+        <div class="text-sm text-purple-600 mb-2">
+         Web Development
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-700 mb-4">"Just finished the React hooks lesson! Can anyone help me understand useEffect better?"</p>
+      <div class="flex items-center text-sm text-gray-500"><span class="mr-4">💬 12 replies</span> <span>❤️ 24 likes</span>
+      </div>
+     </div>
+     <div class="bg-gray-50 rounded-2xl p-6">
+      <div class="flex items-start mb-4">
+       <div class="w-12 h-12 bg-green-200 rounded-full mr-3"></div>
+       <div class="flex-1">
+        <div class="flex items-center mb-1"><span class="font-semibold">Maria Rodriguez</span> <span class="text-sm text-gray-500 ml-2">4 hours ago</span>
+        </div>
+        <div class="text-sm text-purple-600 mb-2">
+         Data Science
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-700 mb-4">"Study group for machine learning starting tomorrow at 7 PM EST. Who's in? 🚀"</p>
+      <div class="flex items-center text-sm text-gray-500"><span class="mr-4">💬 8 replies</span> <span>❤️ 15 likes</span>
+      </div>
+     </div>
+     <div class="bg-gray-50 rounded-2xl p-6">
+      <div class="flex items-start mb-4">
+       <div class="w-12 h-12 bg-purple-200 rounded-full mr-3"></div>
+       <div class="flex-1">
+        <div class="flex items-center mb-1"><span class="font-semibold">David Kim</span> <span class="text-sm text-gray-500 ml-2">1 day ago</span>
+        </div>
+        <div class="text-sm text-purple-600 mb-2">
+         UI/UX Design
+        </div>
+       </div>
+      </div>
+      <p class="text-gray-700 mb-4">"Sharing my portfolio project! Thanks to everyone who gave feedback on the wireframes 🎨"</p>
+      <div class="flex items-center text-sm text-gray-500"><span class="mr-4">💬 25 replies</span> <span>❤️ 48 likes</span>
+      </div>
+     </div>
+    </div>
+    <div class="text-center mt-12">
+     <div class="flex justify-center items-center mb-6">
+      <div class="flex -space-x-2">
+       <div class="w-12 h-12 bg-blue-200 rounded-full border-2 border-white"></div>
+       <div class="w-12 h-12 bg-green-200 rounded-full border-2 border-white"></div>
+       <div class="w-12 h-12 bg-purple-200 rounded-full border-2 border-white"></div>
+       <div class="w-12 h-12 bg-orange-200 rounded-full border-2 border-white"></div>
+       <div class="w-12 h-12 bg-pink-200 rounded-full border-2 border-white"></div>
+       <div class="w-12 h-12 bg-yellow-200 rounded-full border-2 border-white flex items-center justify-center text-sm font-bold">
+        +12K
+       </div>
+      </div>
+     </div><button class="gradient-bg text-white px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-all"> Join the Discussion </button>
+    </div>
+   </div>
+  </section><!-- Blog & Insights Section -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Latest Insights</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Stay updated with the latest in learning and technology</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+     <article class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+      <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600"></div>
+      <div class="p-6">
+       <div class="badge bg-blue-100 text-blue-700 mb-3">
+        Technology
+       </div>
+       <h3 class="text-xl font-bold mb-3">The Future of AI in Education</h3>
+       <p class="text-gray-600 mb-4">How artificial intelligence is transforming the way we learn and teach...</p>
+       <div class="flex items-center text-sm text-gray-500"><span class="mr-4">📅 Dec 15, 2024</span> <span>⏱️ 5 min read</span>
+       </div>
+      </div>
+     </article>
+     <article class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+      <div class="h-48 bg-gradient-to-br from-green-400 to-green-600"></div>
+      <div class="p-6">
+       <div class="badge bg-green-100 text-green-700 mb-3">
+        Career
+       </div>
+       <h3 class="text-xl font-bold mb-3">Remote Work Skills for 2025</h3>
+       <p class="text-gray-600 mb-4">Essential skills every remote worker needs to succeed in the digital age...</p>
+       <div class="flex items-center text-sm text-gray-500"><span class="mr-4">📅 Dec 12, 2024</span> <span>⏱️ 7 min read</span>
+       </div>
+      </div>
+     </article>
+     <article class="bg-white rounded-2xl overflow-hidden shadow-lg card-hover">
+      <div class="h-48 bg-gradient-to-br from-purple-400 to-purple-600"></div>
+      <div class="p-6">
+       <div class="badge bg-purple-100 text-purple-700 mb-3">
+        Learning
+       </div>
+       <h3 class="text-xl font-bold mb-3">Microlearning: Small Steps, Big Results</h3>
+       <p class="text-gray-600 mb-4">Why breaking down complex topics into bite-sized lessons works better...</p>
+       <div class="flex items-center text-sm text-gray-500"><span class="mr-4">📅 Dec 10, 2024</span> <span>⏱️ 4 min read</span>
+       </div>
+      </div>
+     </article>
+    </div>
+    <div class="text-center mt-12"><button class="bg-white text-purple-600 border-2 border-purple-600 px-8 py-4 rounded-full font-semibold hover:bg-purple-600 hover:text-white transition-all"> View All Articles </button>
+    </div>
+   </div>
+  </section><!-- Partners & Accreditation Section -->
+  <section class="py-20 bg-white">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-4">Officially Recognized</h2>
+    <p class="text-xl text-gray-600 text-center mb-12">Our courses are certified by leading institutions worldwide</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center max-w-5xl mx-auto mb-16">
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       Harvard
+      </div>
+      <div class="text-sm text-gray-600">
+       Online
+      </div>
+     </div>
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       Google
+      </div>
+      <div class="text-sm text-gray-600">
+       Certified
+      </div>
+     </div>
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       IBM
+      </div>
+      <div class="text-sm text-gray-600">
+       Partner
+      </div>
+     </div>
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       Microsoft
+      </div>
+      <div class="text-sm text-gray-600">
+       Learn
+      </div>
+     </div>
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       AWS
+      </div>
+      <div class="text-sm text-gray-600">
+       Training
+      </div>
+     </div>
+     <div class="text-center opacity-70 hover:opacity-100 transition-opacity">
+      <div class="text-4xl font-bold text-gray-800 mb-2">
+       Adobe
+      </div>
+      <div class="text-sm text-gray-600">
+       Certified
+      </div>
+     </div>
+    </div>
+    <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-3xl p-8 text-center">
+     <div class="text-6xl mb-4">
+      🏆
+     </div>
+     <h3 class="text-3xl font-bold mb-4">Industry-Recognized Certificates</h3>
+     <p class="text-xl text-gray-600 mb-6">Our certificates are accepted by 500+ companies worldwide</p>
+     <div class="flex justify-center gap-4 flex-wrap"><span class="badge bg-blue-100 text-blue-700">LinkedIn Verified</span> <span class="badge bg-green-100 text-green-700">Industry Standard</span> <span class="badge bg-purple-100 text-purple-700">Globally Accepted</span>
+     </div>
+    </div>
+   </div>
+  </section><!-- FAQ Section -->
+  <section class="py-20 bg-gray-50">
+   <div class="container mx-auto px-6">
+    <h2 class="text-5xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+    <div class="max-w-3xl mx-auto space-y-4">
+     <div class="accordion-item bg-white rounded-2xl p-6"><button class="accordion-trigger w-full text-left flex justify-between items-center font-semibold text-xl"> <span>How do I get certified?</span> <span class="text-2xl">+</span> </button>
+      <div class="accordion-content mt-4">
+       <p class="text-gray-600">Complete all course modules and pass the final assessment with a score of 80% or higher. Your certificate will be available immediately upon completion.</p>
+      </div>
+     </div>
+     <div class="accordion-item bg-white rounded-2xl p-6"><button class="accordion-trigger w-full text-left flex justify-between items-center font-semibold text-xl"> <span>Can I learn at my own pace?</span> <span class="text-2xl">+</span> </button>
+      <div class="accordion-content mt-4">
+       <p class="text-gray-600">Absolutely! All courses are self-paced. Learn whenever and wherever you want, with lifetime access to course materials.</p>
+      </div>
+     </div>
+     <div class="accordion-item bg-white rounded-2xl p-6"><button class="accordion-trigger w-full text-left flex justify-between items-center font-semibold text-xl"> <span>What if I'm not satisfied?</span> <span class="text-2xl">+</span> </button>
+      <div class="accordion-content mt-4">
+       <p class="text-gray-600">We offer a 30-day money-back guarantee. If you're not completely satisfied, contact our support team for a full refund.</p>
+      </div>
+     </div>
+    </div>
+   </div>
+  </section><!-- Final CTA -->
+  <section class="py-32 gradient-bg text-white text-center">
+   <div class="container mx-auto px-6">
+    <h2 id="finalTagline" class="text-6xl font-bold mb-8">Your next skill starts here.</h2>
+    <p class="text-2xl mb-12 opacity-90">Join millions of learners transforming their careers</p>
+    <div class="flex gap-6 justify-center flex-wrap"><button class="bg-white text-purple-600 px-12 py-6 rounded-full text-xl font-semibold hover:bg-opacity-90 transition-all hover:scale-105 shadow-2xl"> Start Learning </button> <button class="bg-transparent border-2 border-white text-white px-12 py-6 rounded-full text-xl font-semibold hover:bg-white hover:text-purple-600 transition-all"> Join Free </button>
+    </div>
+   </div>
+  </section><!-- Footer -->
+  <footer class="bg-gray-900 text-white py-16">
+   <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+     <div>
+      <h3 class="text-2xl font-bold mb-4">LearnHub</h3>
+      <p class="text-gray-400">Empowering learners worldwide</p>
+     </div>
+     <div>
+      <h4 class="font-semibold mb-4">Categories</h4>
+      <ul class="space-y-2 text-gray-400">
+       <li><a href="#" class="hover:text-white transition-colors">Technology</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Design</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Business</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Marketing</a></li>
+      </ul>
+     </div>
+     <div>
+      <h4 class="font-semibold mb-4">Resources</h4>
+      <ul class="space-y-2 text-gray-400">
+       <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+      </ul>
+     </div>
+     <div>
+      <h4 class="font-semibold mb-4">Legal</h4>
+      <ul class="space-y-2 text-gray-400">
+       <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+       <li><a href="#" class="hover:text-white transition-colors">Cookie Policy</a></li>
+      </ul>
+     </div>
+    </div>
+    <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+     <p id="footerCopyright" class="text-gray-400 mb-4 md:mb-0">© 2024 LearnHub. All rights reserved.</p>
+     <div class="flex gap-6"><a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl">📘</a> <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl">🐦</a> <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl">📷</a> <a href="#" class="text-gray-400 hover:text-white transition-colors text-2xl">💼</a>
+     </div>
+    </div>
+   </div>
+  </footer>
+  <script>
+    const defaultConfig = {
+      hero_headline: "Learn Anything. Anywhere.",
+      hero_subheadline: "Join millions of learners worldwide",
+      cta_primary: "Start Learning",
+      cta_secondary: "Browse Courses",
+      search_placeholder: "What do you want to learn today?",
+      metric_students: "1.2M Students",
+      metric_instructors: "5,000 Instructors",
+      metric_satisfaction: "98% Satisfaction",
+      final_tagline: "Your next skill starts here.",
+      footer_copyright: "© 2024 LearnHub. All rights reserved.",
+      background_color: "#667eea",
+      surface_color: "#ffffff",
+      text_color: "#1f2937",
+      primary_action_color: "#667eea",
+      secondary_action_color: "#9333ea"
+    };
 
-<head>
-     
-    <meta charset="UTF-8">
-     
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Digital Learning Platform</title>
-     
-</head>
- 
+    async function onConfigChange(config) {
+      document.getElementById('heroHeadline').textContent = config.hero_headline || defaultConfig.hero_headline;
+      document.getElementById('heroSubheadline').textContent = config.hero_subheadline || defaultConfig.hero_subheadline;
+      document.getElementById('ctaPrimary').textContent = config.cta_primary || defaultConfig.cta_primary;
+      document.getElementById('ctaSecondary').textContent = config.cta_secondary || defaultConfig.cta_secondary;
+      document.getElementById('searchInput').placeholder = config.search_placeholder || defaultConfig.search_placeholder;
+      document.getElementById('metricStudents').textContent = config.metric_students || defaultConfig.metric_students;
+      document.getElementById('metricInstructors').textContent = config.metric_instructors || defaultConfig.metric_instructors;
+      document.getElementById('metricSatisfaction').textContent = config.metric_satisfaction || defaultConfig.metric_satisfaction;
+      document.getElementById('finalTagline').textContent = config.final_tagline || defaultConfig.final_tagline;
+      document.getElementById('footerCopyright').textContent = config.footer_copyright || defaultConfig.footer_copyright;
 
-<body>
-      <div id="scrollIndicator"></div>
-      <section>
-           <div>
-                <svg width="80" height="80" viewbox="0 0 80 80" fill="none">
-                <rect width="80" height="80" rx="16" fill="white">
-                        </rect>
-                   
-            </svg>
-               </div>
-           <div>
-                <svg width="100" height="100" viewbox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="50" fill="white">
-                        </circle>
-                   
-            </svg>
-               </div>
-           <div>
-                <h1 id="heroHeadline">Learn Anything. Anywhere.</h1>
-                <p id="heroSubheadline">Join millions of learners worldwide</p>
-                <div><button id="ctaPrimary"> Start Learning </button> <button id="ctaSecondary"> Browse Courses
-                </button>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <div>
-                     <div><input type="text" id="searchInput" placeholder="What do you want to learn today?"> <button>
-                        Search </button>
-                         </div>
-                     <div><span>🎨 Design</span> <span>🤖 AI</span> <span>📈 Marketing</span> <span>💻 Coding</span>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Top Courses</h2>
-                <p>Start learning from the best</p>
-                <div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Web Development Masterclass</h3>
-                               <p>By Sarah Johnson</p>
-                               <div><span>★★★★★ 4.9</span> <span>$49</span>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>UI/UX Design Fundamentals</h3>
-                               <p>By Michael Chen</p>
-                               <div><span>★★★★★ 4.8</span> <span>$39</span>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Data Science with Python</h3>
-                               <p>By Dr. Emily Rodriguez</p>
-                               <div><span>★★★★★ 5.0</span> <span>$59</span>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Digital Marketing Strategy</h3>
-                               <p>By James Wilson</p>
-                               <div><span>★★★★★ 4.7</span> <span>$44</span>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <p>Trusted by leading organizations</p>
-                <div>
-                     <div>
-                          Google
-                         </div>
-                     <div>
-                          MIT
-                         </div>
-                     <div>
-                          Stanford
-                         </div>
-                     <div>
-                          IBM
-                         </div>
-                     <div>
-                          Microsoft
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <div>
-                     <div>
-                          <div id="metricStudents">
-                               1.2M Students
-                              </div>
-                          <p>Active Learners</p>
-                         </div>
-                     <div>
-                          <div id="metricInstructors">
-                               5,000 Instructors
-                              </div>
-                          <p>Expert Teachers</p>
-                         </div>
-                     <div>
-                          <div id="metricSatisfaction">
-                               98% Satisfaction
-                              </div>
-                          <p>Happy Students</p>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Explore Categories</h2>
-                <p>Find your passion</p>
-                <div>
-                     <div>
-                          <div>
-                               💻
-                              </div>
-                          <h3>Technology</h3>
-                          <p>250+ courses</p>
-                         </div>
-                     <div>
-                          <div>
-                               🎨
-                              </div>
-                          <h3>Design</h3>
-                          <p>180+ courses</p>
-                         </div>
-                     <div>
-                          <div>
-                               💼
-                              </div>
-                          <h3>Business</h3>
-                          <p>320+ courses</p>
-                         </div>
-                     <div>
-                          <div>
-                               📈
-                              </div>
-                          <h3>Marketing</h3>
-                          <p>150+ courses</p>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>How It Works</h2>
-                <div>
-                     <div>
-                          <div>
-                               🔍
-                              </div>
-                          <h3>Discover</h3>
-                          <p>Browse thousands of courses</p>
-                         </div>
-                     <div>
-                          <div>
-                               📚
-                              </div>
-                          <h3>Learn</h3>
-                          <p>Study at your own pace</p>
-                         </div>
-                     <div>
-                          <div>
-                               💪
-                              </div>
-                          <h3>Practice</h3>
-                          <p>Apply your knowledge</p>
-                         </div>
-                     <div>
-                          <div>
-                               🎓
-                              </div>
-                          <h3>Certify</h3>
-                          <p>Earn recognized certificates</p>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <div>
-                     <h2>Track Your Progress</h2>
-                     <p>Stay motivated with visual progress tracking</p>
-                     <div>
-                          <div>
-                               <div><span>Web Development Masterclass</span> <span>75%</span>
-                                   </div>
-                               <div>
-                                    <div></div>
-                                   </div>
-                              </div>
-                          <div>
-                               <div><span>UI/UX Design Fundamentals</span> <span>45%</span>
-                                   </div>
-                               <div>
-                                    <div></div>
-                                   </div>
-                              </div>
-                          <div>
-                               <div>
-                                    <div>
-                                         🔥
-                                        </div>
-                                    <div>
-                                         12
-                                        </div>
-                                    <div>
-                                         Day Streak
-                                        </div>
-                                   </div>
-                               <div>
-                                    <div>
-                                         ⭐
-                                        </div>
-                                    <div>
-                                         850
-                                        </div>
-                                    <div>
-                                         XP Points
-                                        </div>
-                                   </div>
-                               <div>
-                                    <div>
-                                         🏆
-                                        </div>
-                                    <div>
-                                         8
-                                        </div>
-                                    <div>
-                                         Badges
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Meet Our Instructors</h2>
-                <p>Learn from industry experts</p>
-                <div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Sarah Johnson</h3>
-                               <p>Web Developer</p>
-                               <p>10+ years at Google, teaching 50K+ students</p>
-                               <div><span>JavaScript</span> <span>React</span>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Michael Chen</h3>
-                               <p>UX Designer</p>
-                               <p>Lead Designer at Apple, 8 years experience</p>
-                               <div><span>Figma</span> <span>Design</span>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div></div>
-                          <div>
-                               <h3>Dr. Emily Rodriguez</h3>
-                               <p>Data Scientist</p>
-                               <p>PhD from MIT, AI researcher at IBM</p>
-                               <div><span>Python</span> <span>ML</span>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Student Success Stories</h2>
-                <p>Real results from real learners</p>
-                <div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div>
-                                    <h4>Alex Thompson</h4>
-                                    <div>
-                                         ★★★★★
-                                        </div>
-                                   </div>
-                              </div>
-                          <p>"This platform changed my career! I went from beginner to landing my dream job as a web
-                        developer in just 6 months."</p>
-                         </div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div>
-                                    <h4>Maria Garcia</h4>
-                                    <div>
-                                         ★★★★★
-                                        </div>
-                                   </div>
-                              </div>
-                          <p>"The instructors are amazing! Clear explanations, practical projects, and a supportive
-                        community. Highly recommend!"</p>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Choose Your Plan</h2>
-                <p>Start learning today</p>
-                <div>
-                     <div>
-                          <h3>Free</h3>
-                          <div>
-                               $0<span>/mo</span>
-                              </div>
-                          <ul>
-                               <li><span>✓</span> 10 free courses</li>
-                               <li><span>✓</span> Basic support</li>
-                               <li><span>✓</span> Community access</li>
-                              </ul><button> Get Started </button>
-                         </div>
-                     <div>
-                          <div>
-                               Most Popular
-                              </div>
-                          <h3>Pro</h3>
-                          <div>
-                               $29<span>/mo</span>
-                              </div>
-                          <ul>
-                               <li><span>✓</span> Unlimited courses</li>
-                               <li><span>✓</span> Priority support</li>
-                               <li><span>✓</span> Certificates</li>
-                               <li><span>✓</span> Offline access</li>
-                              </ul><button> Start Pro Trial </button>
-                         </div>
-                     <div>
-                          <h3>Enterprise</h3>
-                          <div>
-                               $99<span>/mo</span>
-                              </div>
-                          <ul>
-                               <li><span>✓</span> Everything in Pro</li>
-                               <li><span>✓</span> Team management</li>
-                               <li><span>✓</span> Custom content</li>
-                               <li><span>✓</span> Analytics</li>
-                              </ul><button> Contact Sales </button>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <div>
-                     <h2>Test Your Skills</h2>
-                     <p>Take a quick quiz to find courses perfect for your level</p>
-                     <div>
-                          <div id="quizContainer">
-                               <div>
-                                    <h3>What's your experience with web development?</h3>
-                                    <div><button>
-                                              <div>
-                                                   🌱
-                                                  </div>
-                                              <div>
-                                                   Complete Beginner
-                                                  </div>
-                                              <div>
-                                                   Never written code before
-                                                  </div></button> <button>
-                                              <div>
-                                                   📚
-                                                  </div>
-                                              <div>
-                                                   Some Experience
-                                                  </div>
-                                              <div>
-                                                   Built a few projects
-                                                  </div></button> <button>
-                                              <div>
-                                                   💪
-                                                  </div>
-                                              <div>
-                                                   Intermediate
-                                                  </div>
-                                              <div>
-                                                   Comfortable with frameworks
-                                                  </div></button> <button>
-                                              <div>
-                                                   🚀
-                                                  </div>
-                                              <div>
-                                                   Advanced
-                                                  </div>
-                                              <div>
-                                                   Professional developer
-                                                  </div></button>
-                                        </div>
-                                   </div>
-                               <div>
-                                    <div><span>Progress</span> <span id="quizProgress">1 of 3</span>
-                                        </div>
-                                    <div>
-                                         <div id="quizProgressBar"></div>
-                                        </div>
-                                   </div>
-                              </div>
-                          <div id="quizResults">
-                               <div>
-                                    🎉
-                                   </div>
-                               <h3>Perfect Match Found!</h3>
-                               <p>Based on your answers, we recommend starting with our Intermediate Web Development
-                            track.</p><button> View Recommended Courses </button>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Learning Pathways</h2>
-                <p>Structured paths to master any skill</p>
-                <div>
-                     <div>
-                          <div>
-                               <div>
-                                    💻
-                                   </div>
-                               <div>
-                                    <h3>Web Development Path</h3>
-                                    <p>From zero to full-stack developer</p>
-                                   </div>
-                              </div>
-                          <div>
-                               <div>
-                                    <div>
-                                         <div>
-                                              1
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   HTML &amp; CSS
-                                                  </div>
-                                              <div>
-                                                   4 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              2
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   JavaScript
-                                                  </div>
-                                              <div>
-                                                   6 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              3
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   React
-                                                  </div>
-                                              <div>
-                                                   8 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              4
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Backend
-                                                  </div>
-                                              <div>
-                                                   10 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              🏆
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Certificate
-                                                  </div>
-                                              <div>
-                                                   Portfolio
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               <div>
-                                    📊
-                                   </div>
-                               <div>
-                                    <h3>Data Science Path</h3>
-                                    <p>Master data analysis and machine learning</p>
-                                   </div>
-                              </div>
-                          <div>
-                               <div>
-                                    <div>
-                                         <div>
-                                              1
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Python Basics
-                                                  </div>
-                                              <div>
-                                                   3 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              2
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Statistics
-                                                  </div>
-                                              <div>
-                                                   4 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              3
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Pandas &amp; NumPy
-                                                  </div>
-                                              <div>
-                                                   5 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              4
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Machine Learning
-                                                  </div>
-                                              <div>
-                                                   8 weeks
-                                                  </div>
-                                             </div>
-                                        </div>
-                                    <div></div>
-                                    <div>
-                                         <div>
-                                              🏆
-                                             </div>
-                                         <div>
-                                              <div>
-                                                   Certificate
-                                                  </div>
-                                              <div>
-                                                   Capstone
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Join Our Community</h2>
-                <p>Connect with 12,000+ learners collaborating every day</p>
-                <div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div>
-                                    <div><span>Alex Chen</span> <span>2 hours ago</span>
-                                        </div>
-                                    <div>
-                                         Web Development
-                                        </div>
-                                   </div>
-                              </div>
-                          <p>"Just finished the React hooks lesson! Can anyone help me understand useEffect better?"</p>
-                          <div><span>💬 12 replies</span> <span>❤️ 24 likes</span>
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div>
-                                    <div><span>Maria Rodriguez</span> <span>4 hours ago</span>
-                                        </div>
-                                    <div>
-                                         Data Science
-                                        </div>
-                                   </div>
-                              </div>
-                          <p>"Study group for machine learning starting tomorrow at 7 PM EST. Who's in? 🚀"</p>
-                          <div><span>💬 8 replies</span> <span>❤️ 15 likes</span>
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div>
-                                    <div><span>David Kim</span> <span>1 day ago</span>
-                                        </div>
-                                    <div>
-                                         UI/UX Design
-                                        </div>
-                                   </div>
-                              </div>
-                          <p>"Sharing my portfolio project! Thanks to everyone who gave feedback on the wireframes 🎨"
-                    </p>
-                          <div><span>💬 25 replies</span> <span>❤️ 48 likes</span>
-                              </div>
-                         </div>
-                    </div>
-                <div>
-                     <div>
-                          <div>
-                               <div></div>
-                               <div></div>
-                               <div></div>
-                               <div></div>
-                               <div></div>
-                               <div>
-                                    +12K
-                                   </div>
-                              </div>
-                         </div><button> Join the Discussion </button>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Latest Insights</h2>
-                <p>Stay updated with the latest in learning and technology</p>
-                <div>
-                     <article>
-                          <div></div>
-                          <div>
-                               <div>
-                                    Technology
-                                   </div>
-                               <h3>The Future of AI in Education</h3>
-                               <p>How artificial intelligence is transforming the way we learn and teach...</p>
-                               <div><span>📅 Dec 15, 2024</span> <span>⏱️ 5 min read</span>
-                                   </div>
-                              </div>
-                         </article>
-                     <article>
-                          <div></div>
-                          <div>
-                               <div>
-                                    Career
-                                   </div>
-                               <h3>Remote Work Skills for 2025</h3>
-                               <p>Essential skills every remote worker needs to succeed in the digital age...</p>
-                               <div><span>📅 Dec 12, 2024</span> <span>⏱️ 7 min read</span>
-                                   </div>
-                              </div>
-                         </article>
-                     <article>
-                          <div></div>
-                          <div>
-                               <div>
-                                    Learning
-                                   </div>
-                               <h3>Microlearning: Small Steps, Big Results</h3>
-                               <p>Why breaking down complex topics into bite-sized lessons works better...</p>
-                               <div><span>📅 Dec 10, 2024</span> <span>⏱️ 4 min read</span>
-                                   </div>
-                              </div>
-                         </article>
-                    </div>
-                <div><button> View All Articles </button>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Officially Recognized</h2>
-                <p>Our courses are certified by leading institutions worldwide</p>
-                <div>
-                     <div>
-                          <div>
-                               Harvard
-                              </div>
-                          <div>
-                               Online
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               Google
-                              </div>
-                          <div>
-                               Certified
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               IBM
-                              </div>
-                          <div>
-                               Partner
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               Microsoft
-                              </div>
-                          <div>
-                               Learn
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               AWS
-                              </div>
-                          <div>
-                               Training
-                              </div>
-                         </div>
-                     <div>
-                          <div>
-                               Adobe
-                              </div>
-                          <div>
-                               Certified
-                              </div>
-                         </div>
-                    </div>
-                <div>
-                     <div>
-                          🏆
-                         </div>
-                     <h3>Industry-Recognized Certificates</h3>
-                     <p>Our certificates are accepted by 500+ companies worldwide</p>
-                     <div><span>LinkedIn Verified</span> <span>Industry Standard</span> <span>Globally Accepted</span>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2>Frequently Asked Questions</h2>
-                <div>
-                     <div><button> <span>How do I get certified?</span> <span>+</span> </button>
-                          <div>
-                               <p>Complete all course modules and pass the final assessment with a score of 80% or
-                            higher. Your certificate will be available immediately upon completion.</p>
-                              </div>
-                         </div>
-                     <div><button> <span>Can I learn at my own pace?</span> <span>+</span> </button>
-                          <div>
-                               <p>Absolutely! All courses are self-paced. Learn whenever and wherever you want, with
-                            lifetime access to course materials.</p>
-                              </div>
-                         </div>
-                     <div><button> <span>What if I'm not satisfied?</span> <span>+</span> </button>
-                          <div>
-                               <p>We offer a 30-day money-back guarantee. If you're not completely satisfied, contact
-                            our support team for a full refund.</p>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </section>
-      <section>
-           <div>
-                <h2 id="finalTagline">Your next skill starts here.</h2>
-                <p>Join millions of learners transforming their careers</p>
-                <div><button> Start Learning </button> <button> Join Free </button>
-                    </div>
-               </div>
-          </section>
-      <footer>
-           <div>
-                <div>
-                     <div>
-                          <h3>LearnHub</h3>
-                          <p>Empowering learners worldwide</p>
-                         </div>
-                     <div>
-                          <h4>Categories</h4>
-                          <ul>
-                               <li><a href="#">Technology</a></li>
-                               <li><a href="#">Design</a></li>
-                               <li><a href="#">Business</a></li>
-                               <li><a href="#">Marketing</a></li>
-                              </ul>
-                         </div>
-                     <div>
-                          <h4>Resources</h4>
-                          <ul>
-                               <li><a href="#">Blog</a></li>
-                               <li><a href="#">Help Center</a></li>
-                               <li><a href="#">Community</a></li>
-                               <li><a href="#">Careers</a></li>
-                              </ul>
-                         </div>
-                     <div>
-                          <h4>Legal</h4>
-                          <ul>
-                               <li><a href="#">Privacy Policy</a></li>
-                               <li><a href="#">Terms of Service</a></li>
-                               <li><a href="#">Cookie Policy</a></li>
-                              </ul>
-                         </div>
-                    </div>
-                <div>
-                     <p id="footerCopyright">© 2024 LearnHub. All rights reserved.</p>
-                     <div><a href="#">📘</a> <a href="#">🐦</a> <a href="#">📷</a> <a href="#">💼</a>
-                         </div>
-                    </div>
-               </div>
-          </footer>
-</body>
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      const surfaceColor = config.surface_color || defaultConfig.surface_color;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const primaryActionColor = config.primary_action_color || defaultConfig.primary_action_color;
+      const secondaryActionColor = config.secondary_action_color || defaultConfig.secondary_action_color;
 
+      document.querySelectorAll('.gradient-bg').forEach(el => {
+        el.style.background = `linear-gradient(135deg, ${backgroundColor} 0%, ${secondaryActionColor} 100%)`;
+      });
+
+      document.querySelectorAll('.bg-white').forEach(el => {
+        el.style.backgroundColor = surfaceColor;
+      });
+
+      document.querySelectorAll('h1, h2, h3, h4, p, span, div').forEach(el => {
+        if (!el.classList.contains('text-white') && !el.style.color) {
+          el.style.color = textColor;
+        }
+      });
+
+      document.querySelectorAll('button').forEach(button => {
+        if (button.classList.contains('bg-white')) {
+          button.style.color = primaryActionColor;
+        } else if (!button.classList.contains('bg-transparent')) {
+          button.style.backgroundColor = primaryActionColor;
+        }
+      });
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              config.surface_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.primary_action_color || defaultConfig.primary_action_color,
+            set: (value) => {
+              config.primary_action_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ primary_action_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_action_color || defaultConfig.secondary_action_color,
+            set: (value) => {
+              config.secondary_action_color = value;
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_action_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["hero_headline", config.hero_headline || defaultConfig.hero_headline],
+        ["hero_subheadline", config.hero_subheadline || defaultConfig.hero_subheadline],
+        ["cta_primary", config.cta_primary || defaultConfig.cta_primary],
+        ["cta_secondary", config.cta_secondary || defaultConfig.cta_secondary],
+        ["search_placeholder", config.search_placeholder || defaultConfig.search_placeholder],
+        ["metric_students", config.metric_students || defaultConfig.metric_students],
+        ["metric_instructors", config.metric_instructors || defaultConfig.metric_instructors],
+        ["metric_satisfaction", config.metric_satisfaction || defaultConfig.metric_satisfaction],
+        ["final_tagline", config.final_tagline || defaultConfig.final_tagline],
+        ["footer_copyright", config.footer_copyright || defaultConfig.footer_copyright]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    // Scroll progress indicator
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollPercent = (scrollTop / scrollHeight) * 100;
+      document.getElementById('scrollIndicator').style.width = scrollPercent + '%';
+    });
+
+    // Fade-in animations on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Accordion functionality
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const content = trigger.nextElementSibling;
+        const icon = trigger.querySelector('span:last-child');
+        
+        content.classList.toggle('active');
+        icon.textContent = content.classList.contains('active') ? '−' : '+';
+      });
+    });
+
+    // Category chip interactions
+    document.querySelectorAll('.category-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.category-chip').forEach(c => {
+          c.style.transform = 'scale(1)';
+          c.style.opacity = '0.7';
+        });
+        chip.style.transform = 'scale(1.1)';
+        chip.style.opacity = '1';
+      });
+    });
+
+    // Quiz functionality
+    let currentQuizStep = 1;
+    const totalQuizSteps = 3;
+    
+    document.querySelectorAll('.quiz-option').forEach(option => {
+      option.addEventListener('click', () => {
+        // Remove selected class from all options
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked option
+        option.classList.add('selected');
+        
+        // Simulate quiz progression
+        setTimeout(() => {
+          if (currentQuizStep < totalQuizSteps) {
+            currentQuizStep++;
+            document.getElementById('quizProgress').textContent = `${currentQuizStep} of ${totalQuizSteps}`;
+            document.getElementById('quizProgressBar').style.width = `${(currentQuizStep / totalQuizSteps) * 100}%`;
+            
+            // Update question (simplified for demo)
+            if (currentQuizStep === 2) {
+              document.querySelector('.quiz-question h3').textContent = 'Which learning format do you prefer?';
+              const options = document.querySelectorAll('.quiz-option');
+              options[0].innerHTML = '<div class="text-3xl mb-2">📹</div><div class="font-semibold">Video Lessons</div><div class="text-gray-600 text-sm">Learn through video content</div>';
+              options[1].innerHTML = '<div class="text-3xl mb-2">📖</div><div class="font-semibold">Text & Images</div><div class="text-gray-600 text-sm">Read and practice</div>';
+              options[2].innerHTML = '<div class="text-3xl mb-2">🎯</div><div class="font-semibold">Interactive Exercises</div><div class="text-gray-600 text-sm">Hands-on practice</div>';
+              options[3].innerHTML = '<div class="text-3xl mb-2">👥</div><div class="font-semibold">Live Sessions</div><div class="text-gray-600 text-sm">Real-time interaction</div>';
+            } else if (currentQuizStep === 3) {
+              document.querySelector('.quiz-question h3').textContent = 'How much time can you dedicate per week?';
+              const options = document.querySelectorAll('.quiz-option');
+              options[0].innerHTML = '<div class="text-3xl mb-2">⏰</div><div class="font-semibold">1-3 hours</div><div class="text-gray-600 text-sm">Light commitment</div>';
+              options[1].innerHTML = '<div class="text-3xl mb-2">📅</div><div class="font-semibold">4-8 hours</div><div class="text-gray-600 text-sm">Regular study</div>';
+              options[2].innerHTML = '<div class="text-3xl mb-2">💪</div><div class="font-semibold">9-15 hours</div><div class="text-gray-600 text-sm">Intensive learning</div>';
+              options[3].innerHTML = '<div class="text-3xl mb-2">🚀</div><div class="font-semibold">15+ hours</div><div class="text-gray-600 text-sm">Full commitment</div>';
+            }
+            
+            // Remove selected state from all options
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+              opt.classList.remove('selected');
+            });
+          } else {
+            // Show results
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('quizResults').classList.remove('hidden');
+          }
+        }, 800);
+      });
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99811751352fc795',t:'MTc2MjA1OTg2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
